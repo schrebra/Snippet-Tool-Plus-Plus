@@ -6,7 +6,7 @@ A powerful, feature-rich PowerShell-based screenshot utility that enhances the W
 ![image](https://github.com/user-attachments/assets/caf04988-cf4d-471a-84eb-7973fea76aaa)
 
 
-## Why Choose Snipping Tool++?
+## Why Choose Snipping Tool++
 
 ### For General Users
 - **Simpler Than Paint**: No need to paste into Paint and save manually
