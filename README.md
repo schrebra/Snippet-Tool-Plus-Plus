@@ -1,8 +1,10 @@
-# Snippet-Tool-Plus-Plus
-Better Version of Snippet Tool
+
 # Snipping Tool++
 
 A powerful, feature-rich PowerShell-based screenshot utility that enhances the Windows screenshot experience with professional-grade features, automatic organization, and customizable borders. Perfect for both casual users and professionals who need a reliable screenshot tool.
+
+![image](https://github.com/user-attachments/assets/caf04988-cf4d-471a-84eb-7973fea76aaa)
+
 
 ## Why Choose Snipping Tool++?
 
