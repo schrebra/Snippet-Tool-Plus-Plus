@@ -3,7 +3,8 @@
 
 A powerful, feature-rich PowerShell-based screenshot utility that enhances the Windows screenshot experience with professional-grade features, automatic organization, and customizable borders. Perfect for both casual users and professionals who need a reliable screenshot tool.
 
-![image](https://github.com/user-attachments/assets/fdec917f-870a-49ba-a676-2768effb6669)
+![image](https://github.com/user-attachments/assets/cb5ba9cc-3c6a-4b75-80e1-1749339079de)
+
 
 
 
