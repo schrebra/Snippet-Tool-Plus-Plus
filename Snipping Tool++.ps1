@@ -152,33 +152,62 @@ function Add-ImageOutline {
     $graphics.Dispose()
     return $newImage
 }
+# Custom button style function
+function Set-ModernButtonStyle {
+    param($button)
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderSize = 1
+    $button.FlatAppearance.BorderColor = [System.Drawing.ColorTranslator]::FromHtml("#DEE2E6")
+    $button.BackColor = [System.Drawing.Color]::White
+    $button.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
+    $button.Cursor = [System.Windows.Forms.Cursors]::Hand
+    
+    # Hover effect
+    $button.Add_MouseEnter({
+        $this.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#F1F3F5")
+    })
+    $button.Add_MouseLeave({
+        $this.BackColor = [System.Drawing.Color]::White
+    })
+}
 
-# Create the main form
+# Create the main form with modern styling
 $mainForm = New-Object System.Windows.Forms.Form
 $mainForm.Text = " Snipping Tool++"
-$mainForm.Size = New-Object System.Drawing.Size(550, 220)
+$mainForm.Size = New-Object System.Drawing.Size(585, 280)
 $mainForm.StartPosition = "CenterScreen"
 $mainForm.FormBorderStyle = "FixedDialog"
 $mainForm.MaximizeBox = $false
+$mainForm.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#F8F9FA")
+$mainForm.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+
+# Create a container panel for better organization
+$containerPanel = New-Object System.Windows.Forms.Panel
+$containerPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+$containerPanel.Padding = New-Object System.Windows.Forms.Padding(20)
+$mainForm.Controls.Add($containerPanel)
 
 # Button dimensions and spacing
-$buttonWidth = 150
-$buttonHeight = 40
-$buttonSpacing = 25
+$buttonWidth = 160
+$buttonHeight = 45
+$buttonSpacing = 20
 $totalButtonsWidth = ($buttonWidth * 3) + ($buttonSpacing * 2)
 
 # Calculate positions for centered buttons
-$firstButtonX = ($mainForm.ClientSize.Width - $totalButtonsWidth) / 1.71
+$firstButtonX = ($mainForm.ClientSize.Width - $totalButtonsWidth + 10) / 2
 $secondButtonX = $firstButtonX + $buttonWidth + $buttonSpacing
 $thirdButtonX = $secondButtonX + $buttonWidth + $buttonSpacing
-$buttonY = 17
+$buttonY = 20
 
-# Create the New Snip button
+# Create the New Snip button with modern styling
 $newSnipButton = New-Object System.Windows.Forms.Button
 $newSnipButton.Location = New-Object System.Drawing.Point([int]$firstButtonX, $buttonY)
 $newSnipButton.Size = New-Object System.Drawing.Size($buttonWidth, $buttonHeight)
 $newSnipButton.Text = "New Snippet"
-$mainForm.Controls.Add($newSnipButton)
+Set-ModernButtonStyle $newSnipButton
+$newSnipButton.FlatAppearance.BorderColor = [System.Drawing.ColorTranslator]::FromHtml("#228BE6")
+$newSnipButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#228BE6")
+$containerPanel.Controls.Add($newSnipButton)
 
 # Create the Open with Photo Viewer button
 $openButton = New-Object System.Windows.Forms.Button
@@ -186,108 +215,86 @@ $openButton.Location = New-Object System.Drawing.Point([int]$secondButtonX, $but
 $openButton.Size = New-Object System.Drawing.Size($buttonWidth, $buttonHeight)
 $openButton.Text = "Open Last Snippet"
 $openButton.Enabled = $false
-$mainForm.Controls.Add($openButton)
+Set-ModernButtonStyle $openButton
+$containerPanel.Controls.Add($openButton)
 
 # Create the Open Snippets Folder button
 $openFolderButton = New-Object System.Windows.Forms.Button
 $openFolderButton.Location = New-Object System.Drawing.Point([int]$thirdButtonX, $buttonY)
 $openFolderButton.Size = New-Object System.Drawing.Size($buttonWidth, $buttonHeight)
 $openFolderButton.Text = "Open Snippets Folder"
-$mainForm.Controls.Add($openFolderButton)
+Set-ModernButtonStyle $openFolderButton
+$containerPanel.Controls.Add($openFolderButton)
 
-# Create outline options group
+# Create modern outline options group
 $outlineGroup = New-Object System.Windows.Forms.GroupBox
 $outlineGroup.Text = "Outline Options"
-$outlineGroup.Location = New-Object System.Drawing.Point(20, ($buttonY + $buttonHeight + 15))
-$groupBoxWidth = $mainForm.ClientSize.Width - 32
-$outlineGroup.Size = New-Object System.Drawing.Size($groupBoxWidth, 85)  # Increased height
-$mainForm.Controls.Add($outlineGroup)
+$outlineGroup.Location = New-Object System.Drawing.Point(20, ($buttonY + $buttonHeight + 25))
+$outlineGroup.Size = New-Object System.Drawing.Size(540, 100)
+$outlineGroup.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+$outlineGroup.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#F8F9FA")
 
-# Calculate vertical center position for controls
-$controlsBaseY = 35  # Increased Y position for vertical centering
+$containerPanel.Controls.Add($outlineGroup)
 
-# Create outline checkbox
+# Calculate center positions for controls
+$totalControlsWidth = 400  # Total width of all controls combined
+$startX = ($outlineGroup.Width - $totalControlsWidth) / 2
+$centerY = ($outlineGroup.Height - 15) / 2  # 30 is approximate height of controls
+
+# Create outline checkbox with modern styling
 $outlineCheckbox = New-Object System.Windows.Forms.CheckBox
 $outlineCheckbox.Text = "Add Outline"
-$outlineCheckbox.Location = New-Object System.Drawing.Point(10, $controlsBaseY)
-$outlineCheckbox.Size = New-Object System.Drawing.Size(100, 20)
+$outlineCheckbox.Location = New-Object System.Drawing.Point($startX, $centerY)
+$outlineCheckbox.Size = New-Object System.Drawing.Size(100, 24)
 $outlineCheckbox.Checked = $true
 $outlineGroup.Controls.Add($outlineCheckbox)
 
-# Create color button
+# Create modern color button
 $colorButton = New-Object System.Windows.Forms.Button
 $colorButton.Text = "Select Color"
-$colorButton.Location = New-Object System.Drawing.Point(120, $controlsBaseY)
-$colorButton.Size = New-Object System.Drawing.Size(80, 23)
+$colorButton.Location = New-Object System.Drawing.Point(($startX + 120), $centerY)
+$colorButton.Size = New-Object System.Drawing.Size(90, 28)
+Set-ModernButtonStyle $colorButton
 $outlineGroup.Controls.Add($colorButton)
 
-# Create color preview panel
+# Create color preview panel with modern styling
 $colorPreview = New-Object System.Windows.Forms.Panel
-$colorPreview.Location = New-Object System.Drawing.Point(210, $controlsBaseY)
-$colorPreview.Size = New-Object System.Drawing.Size(23, 23)
+$colorPreview.Location = New-Object System.Drawing.Point(($startX + 220), $centerY)
+$colorPreview.Size = New-Object System.Drawing.Size(28, 28)
 $colorPreview.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
 $colorPreview.BackColor = [System.Drawing.Color]::Black
 $outlineGroup.Controls.Add($colorPreview)
 
-# Create width label
+# Create width label with modern styling
 $widthLabel = New-Object System.Windows.Forms.Label
 $widthLabel.Text = "Width:"
-$widthLabel.Location = New-Object System.Drawing.Point(250, ($controlsBaseY + 3))
-$widthLabel.Size = New-Object System.Drawing.Size(40, 20)
+$widthLabel.Location = New-Object System.Drawing.Point(($startX + 280), ($centerY + 4))
+$widthLabel.Size = New-Object System.Drawing.Size(45, 20)
 $outlineGroup.Controls.Add($widthLabel)
 
-# Create width numeric updown
+# Create modern width numeric updown
 $widthUpDown = New-Object System.Windows.Forms.NumericUpDown
-$widthUpDown.Location = New-Object System.Drawing.Point(290, $controlsBaseY)
-$widthUpDown.Size = New-Object System.Drawing.Size(50, 23)
+$widthUpDown.Location = New-Object System.Drawing.Point(($startX + 330), $centerY)
+$widthUpDown.Size = New-Object System.Drawing.Size(60, 28)
 $widthUpDown.Minimum = 1
 $widthUpDown.Maximum = 10
 $widthUpDown.Value = 2
+$widthUpDown.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
 $outlineGroup.Controls.Add($widthUpDown)
 
-# Calculate the vertical center position between outline group bottom and form bottom
-$statusLabelY = $outlineGroup.Bottom + (($mainForm.ClientSize.Height - $outlineGroup.Bottom) / 2) - 10
-
-# Create status label
+# Create modern status label
 $statusLabel = New-Object System.Windows.Forms.Label
-$statusLabel.Location = New-Object System.Drawing.Point(0, $statusLabelY)
-$statusLabel.Size = New-Object System.Drawing.Size($mainForm.ClientSize.Width, 30)
-$statusLabel.Text = "Click 'New Screenshot' to start. Right-click to cancel."
+$statusLabel.Location = New-Object System.Drawing.Point(20, ($outlineGroup.Location.Y + $outlineGroup.Height + 15))
+$statusLabel.Size = New-Object System.Drawing.Size(540, 30)
+$statusLabel.Text = "Click 'New Snippet' to start. Right-click to cancel."
 $statusLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-$mainForm.Controls.Add($statusLabel)
+$statusLabel.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#E9ECEF")
+$statusLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+$containerPanel.Controls.Add($statusLabel)
 
-# Color button click event
-$colorButton.Add_Click({
-    $colorDialog = New-Object System.Windows.Forms.ColorDialog
-    $colorDialog.Color = $colorPreview.BackColor
-    if ($colorDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-        $colorPreview.BackColor = $colorDialog.Color
-    }
-})
-
-# Open button click event
-$openButton.Add_Click({
-    if ($script:lastScreenshotPath -and (Test-Path $script:lastScreenshotPath)) {
-        Start-Process $script:lastScreenshotPath
-    }
-    else {
-        $statusLabel.Text = "No screenshot available."
-    }
-})
-
-# Open Folder button click event
-$openFolderButton.Add_Click({
-    if (Test-Path $snippetsFolder) {
-        Start-Process $snippetsFolder
-    }
-    else {
-        $statusLabel.Text = "Snippets folder not found."
-    }
-})
-
-# New screenshot button click event
+# Event handlers
 $newSnipButton.Add_Click({
-    $mainForm.WindowState = "Minimized"
+    $mainForm.WindowState = [System.Windows.Forms.FormWindowState]::Minimized
     Start-Sleep -Milliseconds 250
 
     $selectionForm = New-Object SelectionForm
@@ -295,47 +302,67 @@ $newSnipButton.Add_Click({
 
     if ($result -eq [System.Windows.Forms.DialogResult]::OK) {
         $selection = $selectionForm.GetSelection()
-
+        
         if ($selection.Width -gt 0 -and $selection.Height -gt 0) {
             $screenshot = Capture-Screenshot -bounds $selection
-
-            # Add outline if checkbox is checked
+            
             if ($outlineCheckbox.Checked) {
-                $outlinedScreenshot = Add-ImageOutline -image $screenshot -color $colorPreview.BackColor -width $widthUpDown.Value
-                $screenshot.Dispose()
-                $screenshot = $outlinedScreenshot
+                $screenshot = Add-ImageOutline -image $screenshot -color $colorPreview.BackColor -width $widthUpDown.Value
             }
-
+            
             # Generate filename with timestamp
-            $timestamp = Get-Date -Format "yyMMdd_HHmmss"
-            $filename = Join-Path $snippetsFolder "$timestamp.png"
-
-            try {
-                $screenshot.Save($filename, [System.Drawing.Imaging.ImageFormat]::Png)
-                Copy-ImageToClipboard -image $screenshot
-                $script:lastScreenshotPath = $filename
-                $simpleFileName = "Pictures\Snippets\" + (Split-Path $filename -Leaf)
-                $statusLabel.Text = "Saved to: $simpleFileName (Copied to clipboard)"
-                $openButton.Enabled = $true
-            }
-            catch {
-                $statusLabel.Text = "Error saving screenshot: $($_.Exception.Message)"
-            }
-            finally {
-                $screenshot.Dispose()
-            }
-        }
-        else {
-            $statusLabel.Text = "Invalid selection area."
+            $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+            $filename = "Screenshot_$timestamp.png"
+            $filepath = Join-Path $snippetsFolder $filename
+            
+            # Save the image
+            $screenshot.Save($filepath, [System.Drawing.Imaging.ImageFormat]::Png)
+            
+            # Copy to clipboard
+            Copy-ImageToClipboard -image $screenshot
+            
+            # Update status and enable open button
+            $statusLabel.Text = "Screenshot saved as $filename and copied to clipboard"
+            $openButton.Enabled = $true
+            $script:lastScreenshotPath = $filepath
+            
+            # Cleanup
+            $screenshot.Dispose()
         }
     }
-    else {
-        $statusLabel.Text = "Screenshot cancelled."
-    }
-
-    $mainForm.WindowState = "Normal"
-    $mainForm.Activate()
+    
+    $mainForm.WindowState = [System.Windows.Forms.FormWindowState]::Normal
 })
 
-# Show the main form
-$mainForm.ShowDialog()
+$openButton.Add_Click({
+    if ($script:lastScreenshotPath -and (Test-Path $script:lastScreenshotPath)) {
+        Start-Process $script:lastScreenshotPath
+    }
+})
+
+$openFolderButton.Add_Click({
+    Start-Process $snippetsFolder
+})
+
+$colorButton.Add_Click({
+    $colorDialog = New-Object System.Windows.Forms.ColorDialog
+    $colorDialog.Color = $colorPreview.BackColor
+    
+    if ($colorDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        $colorPreview.BackColor = $colorDialog.Color
+    }
+})
+
+# Clean up resources when form closes
+$mainForm.Add_FormClosing({
+    if ($script:lastScreenshotPath) {
+        $screenshot.Dispose()
+    }
+})
+
+# Show the form
+$mainForm.Add_Shown({$mainForm.Activate()})
+[void]$mainForm.ShowDialog()
+
+# Clean up when script ends
+$mainForm.Dispose()
